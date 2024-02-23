@@ -8,3 +8,5 @@ const pool = new Pool({
 	password: 'password123',
 	database: 'db123',
 });
+
+module.exports = pool;
