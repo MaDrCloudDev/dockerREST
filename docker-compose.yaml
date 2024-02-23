@@ -8,5 +8,5 @@ services:
       POSTGRES_PASSWORD: "password123"
   app:
     image: "my-node-app"
-    port:
+    ports:
       - 13000:3000

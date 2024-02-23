@@ -1,11 +1,14 @@
 ###
-GET http://localhost:1337
+GET http://localhost:13000/setup
 
 ###
-POST http://localhost:1337
+GET http://localhost:13000
+
+###
+POST http://localhost:13000/
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "location": "New York"
+    "name": "schoolname",
+    "location": "50 hello street"
 }
