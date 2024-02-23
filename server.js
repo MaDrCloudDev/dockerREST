@@ -1,24 +1,33 @@
 const express = require('express');
 const pool = require('./db');
-const port = 1337;
+const port = 3000;
 
 const app = express();
 app.use(express.json());
 
 // routes
 app.get('/', async (req, res) => {
-	res.sendStatus(200);
+	try {
+		const data = await pool.query('SELECT * FROM schools');
+		res.status(200).send(data.rows);
+	} catch (err) {
+		console.error(err.message);
+		res.sendStatus(500);
+	}
 });
 
 app.post('/', async (req, res) => {
 	const { name, location } = req.body;
 
-	// Add logging to inspect req.body
-	console.log(req.body);
-
-	res.status(200).send({
-		message: `Your keys were ${name} and ${location}!`,
-	});
+	try {
+		await pool.query(
+			'INSERT INTO schools (name, address) VALUES ($1, $2), [name, location]'
+		);
+		res.status(200).send({ message: 'School added' });
+	} catch (err) {
+		console.error(err.message);
+		res.sendStatus(500);
+	}
 });
 
 app.get('/setup', async (req, res) => {
@@ -26,6 +35,7 @@ app.get('/setup', async (req, res) => {
 		await pool.query(
 			'CREATE TABLE IF NOT EXISTS schools (id SERIAL PRIMARY KEY, name VARCHAR(100), address VARCHAR(100)'
 		);
+		res.status(200).send({ message: 'School table created' });
 	} catch (err) {
 		console.error(err.message);
 		res.sendStatus(500);
